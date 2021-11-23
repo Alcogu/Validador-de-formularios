@@ -18,13 +18,23 @@
 
         <div>
             <label>Nombre:</label>
-            <input class="jsValidator" type="text" name="name">
+            <input 
+                class="jsValidator" 
+                type="text" 
+                name="name"
+                data-validators="required length">
         </div>
 
         <div>
             <label>E-mail:</label>
-            <input class="jsValidator" type="email" name="email">
+            <input 
+                class="jsValidator" 
+                type="email" 
+                name="email"
+                data-validators="required">
         </div>
+
+        <button type="submit">Enviar</button>
         
     </form>
 
@@ -32,9 +42,9 @@
 
     <script>
 
-        const myFormValidator = new JSValidator('myForm');
-        console.log(myFormValidator.inputs);
-
+        //Se inializa la escucha
+        const myFormValidator = new JSValidator('myForm').init();
+        
     </script>
 
 </body>
