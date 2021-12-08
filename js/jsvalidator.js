@@ -6,6 +6,24 @@ class JSValidator{
     //Mecanismo de control, pila de errores
     errors = [];
 
+    via='http';
+
+    validators ={
+
+        minLength:3,
+        maxLength:25,
+    }
+
+    msg = {
+        required: `Este campo es requerido`,
+        minLength: `Longitud no valida. Minimo __minLength__ caracteres`,
+        maxLength: `Longitud no valida. Maximo __maxLength__ caracteres`,
+        email: `Este campo de email es no valido`,
+        integer: `Este campo debe tener un numero entero`,
+        digit: `Este campo debe ser un digito`,
+        url: `Este campo debe ser una URL valida`
+    }
+
     constructor (formId){
 
         this.setForm(formId);
@@ -33,6 +51,22 @@ class JSValidator{
             this.appendErrorsTag(input);
 
         });
+
+    }
+
+    setAjax(){
+
+        this.via = 'ajax';
+
+        return this;
+
+    }
+
+    setHttp(){
+
+        this.via = 'http';
+
+        return this;
 
     }
 
@@ -73,10 +107,23 @@ class JSValidator{
                 //Prevenir el envio del formulario
                 e.preventDefault();
 
-                console.log('ERROR: Ha ocurrido un error de validacion');
-
             }else{
-                console.log('ÉCITO: El formulario se ha enviado')
+
+                //Evalua si se debe enviar ajax o htto
+                if(this.via == 'ajax'){
+
+                    e.preventDefault();
+
+                    this.submitHandler();
+
+                }else{
+
+                    //solo para fines demostrativos
+                    e.preventDefault();
+
+                    console.log('Formulario enviado')
+
+                }
             }
 
         });
@@ -85,7 +132,7 @@ class JSValidator{
     validateInputs(){
 
         //Se añade una escucha para cada uno de los inputs
-        this.inputs,forEach(input => {
+        this.inputs.forEach(input => {
 
             input.addEventListener('input', (e) => {
 
@@ -183,6 +230,36 @@ class JSValidator{
         });
 
     }
+
+    //se envia formulario
+    submitHandler(){
+
+        //se crea objeto de data del formulario con la api FormData
+        //el cual recibe el formulario que se esta trabajando
+        let data = new FormData(this.form);
+
+        //fetch es un metodo basado en promesas
+        fetch(this.form.action, {
+            //se define metodo
+            method: this.form.method,
+            //se define cuerpo
+            body:data
+        })
+        //respuesta tipo json
+        .then(response => response.json())
+        //data del servidor
+        .then(data => {
+
+            //se recibe formulario
+            console.log(data);
+
+        })
+        .catch(error => {
+
+            console.log(error);
+
+        });
+    }
     
     /*Este metodo se debe poner al final y se encarga de inicializar todo, este metodo se encarga de llamar
     a validateForm que se encarga de escuchar el metodo submit
@@ -196,7 +273,6 @@ class JSValidator{
         return this;
 
     }
-
 }
 
 JSValidator.prototype._required = function (input){
@@ -205,7 +281,7 @@ JSValidator.prototype._required = function (input){
     let value = input.value;
 
     //mensaje de error al usuario
-    let msg = 'Este campo es requerido';
+    let msg = this.msg.required;
 
     //Validacion si es true es porque esta vacio
     //trim elimina espacios en los extremos
@@ -219,5 +295,46 @@ JSValidator.prototype._required = function (input){
 
 JSValidator.prototype._length = function (input){
 
+    //se recupera el valor del imput
+    let value = input.value;
+
+    //Longitud del input
+    let inputLength = value.length;
+
+    //se define minLength
+    let minLength = (input.dataset.validators_minlength !== undefined)? Number(input.dataset.
+        validators_minlength): this.validators.minLength;
+
+    //se define maxLength
+    let maxLength = (input.dataset.validators_maxlength !== undefined)? Number(input.dataset.
+        validators_maxlength): this.validators.maxLength;
+
+    //se verifica minLength
+    if(inputLength < minLength){
+
+        msg = this.msg.minLength.replace('__minLength__', minLength);
+
+        this.setError(input,msg);
+
+    }
+
+    //se verifica maxLength
+    if(inputLength > maxLength){
+
+        msg = this.msg.maxLength.replace('__maxLength__', maxLength);
+
+        this.setError(input,msg);
+
+    }
 
 };
+
+JSValidator.prototype._email = function (input){
+
+    let value = input.value;
+
+    let msg = this.msg.email;
+
+    let pattern = new RegExp()
+
+}

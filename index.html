@@ -14,7 +14,7 @@
 
 <body>
 
-    <form id="myForm" method ="GET">
+    <form action="/endpoint.php" id="myForm" method ="POST">
 
         <div>
             <label>Nombre:</label>
@@ -22,11 +22,13 @@
                 class="jsValidator" 
                 type="text" 
                 name="name"
-                data-validators="required length">
+                data-validators="required length"
+                data-validators_minlength="5"
+                data-validators_maxlength="300">
         </div>
 
         <div>
-            <label>E-mail:</label>
+            <label>Email:</label>
             <input 
                 class="jsValidator" 
                 type="text" 
@@ -43,7 +45,7 @@
     <script>
 
         //Se inializa la escucha
-        const myFormValidator = new JSValidator('myForm').init();
+        const myFormValidator = new JSValidator('myForm').init().setAjax();
         
     </script>
 
