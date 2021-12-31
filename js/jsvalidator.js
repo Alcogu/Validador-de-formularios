@@ -20,8 +20,9 @@ class JSValidator{
         maxLength: `Longitud no valida. Maximo __maxLength__ caracteres`,
         email: `Este campo de email es no valido`,
         integer: `Este campo debe tener un numero entero`,
+        alphanumeric: `Solo se permiten letras y numeros sin espacios`,
         digit: `Este campo debe ser un digito`,
-        url: `Este campo debe ser una URL valida`
+        url: `Este campo debe ser una URL valida`,
     }
 
     constructor (formId){
@@ -331,10 +332,78 @@ JSValidator.prototype._length = function (input){
 
 JSValidator.prototype._email = function (input){
 
+    //Se recupera el valor del input
     let value = input.value;
 
+    //Se define el mensaje de error
     let msg = this.msg.email;
 
-    let pattern = new RegExp()
+    //Expresion regular para validar el email
+    let pattern = new RegExp(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i);
 
-}
+    //En caso de que la validacion falle mandar error
+    if(!pattern.test(value) && value.trim() !=""){
+
+        this.setError(input, msg);
+
+    }
+
+};
+
+JSValidator.prototype._integer = function (input){
+
+    //Se recupera el valor del input
+    let value = input.value;
+
+    //Se define el mensaje de error
+    let msg = this.msg.integer;
+
+    let pattern = new RegExp(/^[0-9]+$/);
+
+    if(!pattern.test(value) && value.trim() !=""){
+
+        this.setError(input, msg);
+
+    }
+
+};
+
+JSValidator.prototype._alphanumeric = function(input) {
+	
+	// En primer lugar vamos a recuperar el valor del input
+	let value = input.value;
+ 
+	// Definir el mensaje de error
+	let msg = this.msg.alphanumeric;
+ 
+	// expresión regular para validar digit
+	let pattern = new RegExp(/^[a-zA-Z0-9]+$/);
+ 
+	// En caso de que la validación falle mandar error.
+    if (!pattern.test(value) && value.trim() != "") {
+ 
+    	this.setError(input, msg);
+ 
+    }
+ 
+};
+
+JSValidator.prototype._url = function(input) {
+	
+	// En primer lugar vamos a recuperar el valor del input
+	let value = input.value;
+ 
+	// Definir el mensaje de error
+	let msg = this.msg.url;
+ 
+	// expresión regular para validar url
+	var pattern = new RegExp(/^(https?|s?ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i);
+ 
+	// En caso de que la validación falle mandar error.
+    if (!pattern.test(value) && value.trim() != "") {
+ 
+    	this.setError(input, msg);
+ 
+    }
+ 
+};
