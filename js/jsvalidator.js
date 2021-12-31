@@ -310,6 +310,8 @@ JSValidator.prototype._length = function (input){
     let maxLength = (input.dataset.validators_maxlength !== undefined)? Number(input.dataset.
         validators_maxlength): this.validators.maxLength;
 
+    let msg;
+
     //se verifica minLength
     if(inputLength < minLength){
 
